@@ -2,8 +2,8 @@ import { Suggestions } from "@/lib/calculations";
 import { Card } from "./ui";
 
 const TONE = {
-  under: { text: "text-[var(--accent)]", bg: "bg-[var(--accent-soft)]" },
-  on_track: { text: "text-[var(--accent)]", bg: "bg-[var(--accent-soft)]" },
+  under: { text: "text-[var(--success)]", bg: "bg-[var(--success-soft)]" },
+  on_track: { text: "text-[var(--success)]", bg: "bg-[var(--success-soft)]" },
   over: { text: "text-[var(--danger)]", bg: "bg-[var(--danger-soft)]" },
 };
 

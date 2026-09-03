@@ -28,11 +28,12 @@ export function StatCard({
   label: string;
   value: string | number;
   unit?: string;
-  tone?: "default" | "accent" | "warn" | "danger";
+  tone?: "default" | "accent" | "success" | "warn" | "danger";
 }) {
   const toneClasses = {
     default: "text-[var(--foreground)]",
     accent: "text-[var(--accent)]",
+    success: "text-[var(--success)]",
     warn: "text-[var(--warn)]",
     danger: "text-[var(--danger)]",
   }[tone];
@@ -48,10 +49,19 @@ export function StatCard({
   );
 }
 
-export function ProgressBar({ value, max, tone = "accent" }: { value: number; max: number; tone?: "accent" | "warn" | "danger" }) {
+export function ProgressBar({
+  value,
+  max,
+  tone = "accent",
+}: {
+  value: number;
+  max: number;
+  tone?: "accent" | "success" | "warn" | "danger";
+}) {
   const pct = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;
   const barColor = {
-    accent: "bg-[var(--accent)]",
+    accent: "bg-gradient-to-r from-[var(--accent-start)] to-[var(--accent-end)]",
+    success: "bg-[var(--success)]",
     warn: "bg-[var(--warn)]",
     danger: "bg-[var(--danger)]",
   }[tone];
@@ -69,7 +79,7 @@ export const inputClass =
 export const labelClass = "mb-1 block text-xs font-medium text-[var(--muted)]";
 
 export const primaryButtonClass =
-  "rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white transition-all hover:opacity-90 active:scale-[0.97] disabled:opacity-50 disabled:active:scale-100";
+  "rounded-lg bg-gradient-to-r from-[var(--accent-start)] to-[var(--accent-end)] px-4 py-2 text-sm font-medium text-white transition-all hover:opacity-90 active:scale-[0.97] disabled:opacity-50 disabled:active:scale-100";
 
 export const secondaryButtonClass =
   "rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition-transform hover:bg-black/5 active:scale-[0.97]";

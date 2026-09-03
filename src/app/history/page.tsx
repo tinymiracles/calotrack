@@ -89,7 +89,7 @@ export default function HistoryPage() {
                   </div>
                   <span
                     className={`tabular-nums font-medium ${
-                      s.net > 0 ? "text-[var(--warn)]" : s.net < 0 ? "text-[var(--accent)]" : "text-[var(--muted)]"
+                      s.net > 0 ? "text-[var(--warn)]" : s.net < 0 ? "text-[var(--success)]" : "text-[var(--muted)]"
                     }`}
                   >
                     {s.net > 0 ? "+" : ""}

@@ -151,11 +151,11 @@ export default function TodayPage() {
             label="Remaining"
             value={Math.round(summary.remainingCalories)}
             unit="kcal"
-            tone={summary.remainingCalories < 0 ? "danger" : "default"}
+            tone={summary.remainingCalories < 0 ? "danger" : "success"}
           />
         </div>
         <div className="mt-3">
-          <ProgressBar value={summary.caloriesIn} max={caloriesBudget} tone={summary.caloriesIn > caloriesBudget ? "danger" : "accent"} />
+          <ProgressBar value={summary.caloriesIn} max={caloriesBudget} tone={summary.caloriesIn > caloriesBudget ? "danger" : "success"} />
           <p className="mt-1 text-xs text-[var(--muted)]">
             Budget today: {Math.round(caloriesBudget)} kcal ({summary.maintenanceCalories} maintenance
             {summary.exerciseCalories > 0 ? ` + ${summary.exerciseCalories} exercise` : ""})

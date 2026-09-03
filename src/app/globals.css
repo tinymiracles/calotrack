@@ -6,8 +6,18 @@
   --foreground: #1a1f1c;
   --muted: #6b7280;
   --border: #e5e7eb;
-  --accent: #15803d;
-  --accent-soft: #dcfce7;
+  /* Brand: teal → ocean blue. --accent is the solid representative (text,
+   * icons, focus rings, status bar); --accent-start/--accent-end are the
+   * gradient stops used on buttons, the logo mark and the progress bar. */
+  --accent: #2563eb;
+  --accent-start: #0d9488;
+  --accent-end: #2563eb;
+  --accent-soft: #dbeafe;
+  /* Success stays the original CaloTrack green, now reserved specifically
+   * for "you're doing well" signals (on track, good foods, goal on pace)
+   * rather than the whole UI. */
+  --success: #15803d;
+  --success-soft: #dcfce7;
   --warn: #b45309;
   --warn-soft: #fef3c7;
   --danger: #b91c1c;
@@ -21,7 +31,11 @@
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-accent: var(--accent);
+  --color-accent-start: var(--accent-start);
+  --color-accent-end: var(--accent-end);
   --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
   --color-warn: var(--warn);
   --color-warn-soft: var(--warn-soft);
   --color-danger: var(--danger);

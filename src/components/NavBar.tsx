@@ -22,7 +22,7 @@ export default function NavBar() {
     >
       <div className="mx-auto flex max-w-2xl items-center justify-between px-4 py-3">
         <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-[var(--accent)]" />
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-gradient-to-br from-[var(--accent-start)] to-[var(--accent-end)]" />
           CaloTrack
         </Link>
         <button

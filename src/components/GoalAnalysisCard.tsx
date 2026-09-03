@@ -2,7 +2,7 @@ import { GoalAnalysis } from "@/lib/calculations";
 import { Card } from "./ui";
 
 const TONE = {
-  onPace: { text: "text-[var(--accent)]", bg: "bg-[var(--accent-soft)]" },
+  onPace: { text: "text-[var(--success)]", bg: "bg-[var(--success-soft)]" },
   offPace: { text: "text-[var(--warn)]", bg: "bg-[var(--warn-soft)]" },
 };
 
