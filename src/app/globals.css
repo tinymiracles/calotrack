@@ -13,7 +13,7 @@
   --accent-start: #0d9488;
   --accent-end: #2563eb;
   --accent-soft: #dbeafe;
-  /* Success stays the original CaloTrack green, now reserved specifically
+  /* Success stays the original Poshan green, now reserved specifically
    * for "you're doing well" signals (on track, good foods, goal on pace)
    * rather than the whole UI. */
   --success: #15803d;

@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "CaloTrack — daily calorie & fitness tracker",
-    short_name: "CaloTrack",
+    name: "Poshan — daily calorie & fitness tracker",
+    short_name: "Poshan",
     description: "Log meals and workouts, see calories in vs. burned, and track your goal.",
     start_url: "/",
     scope: "/",

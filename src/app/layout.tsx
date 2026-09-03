@@ -11,13 +11,13 @@ import ThemeApplier from "@/components/ThemeApplier";
 const THEME_INIT_SCRIPT = `(function(){try{var raw=localStorage.getItem("calotrack:profile");var theme=raw?(JSON.parse(raw).colorTheme||"teal"):"teal";document.documentElement.setAttribute("data-theme",theme);}catch(e){}})();`;
 
 export const metadata: Metadata = {
-  title: "CaloTrack — daily calorie & fitness tracker",
+  title: "Poshan — daily calorie & fitness tracker",
   description: "Track meals, workouts and calories in one place.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "CaloTrack",
+    title: "Poshan",
   },
   icons: {
     icon: [

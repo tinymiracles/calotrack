@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** Registers the service worker that makes CaloTrack installable and
+/** Registers the service worker that makes Poshan installable and
  * gives it basic offline support. No UI — just runs once on mount. */
 export default function ServiceWorkerRegister() {
   useEffect(() => {

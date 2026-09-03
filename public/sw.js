@@ -1,5 +1,5 @@
 // Minimal service worker: enough for "installable" PWA criteria, plus
-// basic offline support. CaloTrack's data lives in localStorage, so once
+// basic offline support. Poshan's data lives in localStorage, so once
 // the app shell is cached, logging a meal offline works fine — it just
 // won't re-fetch anything from the network.
 

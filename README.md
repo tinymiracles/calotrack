@@ -1,4 +1,4 @@
-# CaloTrack
+# Poshan
 
 A minimal daily calorie & fitness tracker: log your meals, workouts and walks, and see your calories in vs. burned, protein progress, and simple suggestions for the rest of the day. Set up your height, weight, age and maintenance calories once — then just log every day.
 
