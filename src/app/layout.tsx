@@ -3,6 +3,12 @@ import "./globals.css";
 import NavBar from "@/components/NavBar";
 import BottomTabBar from "@/components/BottomTabBar";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import ThemeApplier from "@/components/ThemeApplier";
+
+// Sets data-theme on <html> before first paint, straight from localStorage,
+// so a returning user's chosen color theme never flashes to the default.
+// Kept as plain JS (not a TS import) since it has to run inline in <head>.
+const THEME_INIT_SCRIPT = `(function(){try{var raw=localStorage.getItem("calotrack:profile");var theme=raw?(JSON.parse(raw).colorTheme||"teal"):"teal";document.documentElement.setAttribute("data-theme",theme);}catch(e){}})();`;
 
 export const metadata: Metadata = {
   title: "CaloTrack — daily calorie & fitness tracker",
@@ -38,7 +44,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full antialiased">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)]">
+        <ThemeApplier />
         <ServiceWorkerRegister />
         <NavBar />
         <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 pb-24">{children}</main>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ActivityLevel, DietPreference, Goal, Profile, Sex } from "@/lib/types";
+import { ActivityLevel, ColorTheme, DietPreference, Goal, Profile, Sex } from "@/lib/types";
 import { clearAllData, saveProfile } from "@/lib/storage";
 import {
   ACTIVITY_LABELS,
@@ -10,6 +10,7 @@ import {
   defaultProteinTarget,
   estimateMaintenanceCalories,
 } from "@/lib/calculations";
+import { applyColorTheme, DEFAULT_THEME, THEMES } from "@/lib/themes";
 import { Card, inputClass, labelClass, primaryButtonClass, secondaryButtonClass } from "./ui";
 
 function resizeImage(file: File, maxDim = 480, quality = 0.82): Promise<string> {
@@ -49,6 +50,7 @@ export default function ProfileForm({ existing }: { existing?: Profile }) {
   const [maintenanceCalories, setMaintenanceCalories] = useState(existing?.maintenanceCalories?.toString() ?? "");
   const [proteinTargetG, setProteinTargetG] = useState(existing?.proteinTargetG?.toString() ?? "");
   const [dietPreference, setDietPreference] = useState<DietPreference>(existing?.dietPreference ?? "all");
+  const [colorTheme, setColorTheme] = useState<ColorTheme>(existing?.colorTheme ?? DEFAULT_THEME);
   const [photoDataUrl, setPhotoDataUrl] = useState<string | undefined>(existing?.photoDataUrl);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -109,6 +111,7 @@ export default function ProfileForm({ existing }: { existing?: Profile }) {
       maintenanceIsManual,
       proteinTargetG: Math.round(finalProtein),
       dietPreference,
+      colorTheme,
       photoDataUrl,
       createdAt: existing?.createdAt ?? now,
       updatedAt: now,
@@ -117,6 +120,7 @@ export default function ProfileForm({ existing }: { existing?: Profile }) {
     setSaving(true);
     try {
       await saveProfile(profile);
+      applyColorTheme(colorTheme);
       router.push("/");
       router.refresh();
     } finally {
@@ -283,6 +287,39 @@ export default function ProfileForm({ existing }: { existing?: Profile }) {
       </Card>
 
       <Card className="flex flex-col gap-3">
+        <div>
+          <label className={labelClass}>Color theme</label>
+          <p className="mb-2 text-xs text-[var(--muted)]">Pick a look — the whole app repaints right away, just for you.</p>
+          <div className="grid grid-cols-2 gap-2">
+            {THEMES.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => {
+                  setColorTheme(t.id);
+                  applyColorTheme(t.id);
+                }}
+                className={`flex items-center gap-2.5 rounded-xl border p-2.5 text-left transition-all active:scale-[0.97] ${
+                  colorTheme === t.id
+                    ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+                    : "border-[var(--border)] hover:bg-black/5"
+                }`}
+              >
+                <span
+                  className="h-7 w-7 shrink-0 rounded-full"
+                  style={{ background: `linear-gradient(135deg, ${t.swatch[0]}, ${t.swatch[1]})` }}
+                />
+                <span>
+                  <span className="block text-sm font-medium">{t.label}</span>
+                  <span className="block text-xs text-[var(--muted)]">{t.tagline}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </Card>
+
+      <Card className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <label className={labelClass}>Maintenance calories</label>
           <button
@@ -334,7 +371,15 @@ export default function ProfileForm({ existing }: { existing?: Profile }) {
           {saving ? "Saving…" : existing ? "Save changes" : "Start tracking"}
         </button>
         {existing && (
-          <button type="button" className={secondaryButtonClass} onClick={() => router.push("/")}>
+          <button
+            type="button"
+            className={secondaryButtonClass}
+            onClick={() => {
+              // Undo any live theme preview that wasn't saved.
+              applyColorTheme(existing?.colorTheme);
+              router.push("/");
+            }}
+          >
             Cancel
           </button>
         )}

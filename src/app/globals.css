@@ -24,6 +24,33 @@
   --danger-soft: #fee2e2;
 }
 
+/* Alternate color themes, picked in Profile → Color theme. Teal → Blue
+ * (the :root defaults above) is what a new profile starts on; these
+ * override the same --accent* tokens, so every screen that already reads
+ * from them repaints automatically — nothing else needs to change per
+ * theme. --success/--warn/--danger stay constant on purpose: "you're
+ * doing well" should read the same regardless of which look is picked. */
+:root[data-theme="forest"] {
+  --accent: #15803d;
+  --accent-start: #15803d;
+  --accent-end: #15803d;
+  --accent-soft: #dcfce7;
+}
+
+:root[data-theme="sunset"] {
+  --accent: #ea580c;
+  --accent-start: #ea580c;
+  --accent-end: #f59e0b;
+  --accent-soft: #ffedd5;
+}
+
+:root[data-theme="berry"] {
+  --accent: #7c3aed;
+  --accent-start: #db2777;
+  --accent-end: #7c3aed;
+  --accent-soft: #f3e8ff;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
