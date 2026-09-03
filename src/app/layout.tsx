@@ -8,7 +8,7 @@ import ThemeApplier from "@/components/ThemeApplier";
 // Sets data-theme on <html> before first paint, straight from localStorage,
 // so a returning user's chosen color theme never flashes to the default.
 // Kept as plain JS (not a TS import) since it has to run inline in <head>.
-const THEME_INIT_SCRIPT = `(function(){try{var raw=localStorage.getItem("calotrack:profile");var theme=raw?(JSON.parse(raw).colorTheme||"teal"):"teal";document.documentElement.setAttribute("data-theme",theme);}catch(e){}})();`;
+const THEME_INIT_SCRIPT = `(function(){try{var raw=localStorage.getItem("calotrack:profile");var theme=raw?(JSON.parse(raw).colorTheme||"signature"):"signature";document.documentElement.setAttribute("data-theme",theme);}catch(e){}})();`;
 
 export const metadata: Metadata = {
   title: "Poshan — daily calorie & fitness tracker",
@@ -37,7 +37,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#2563eb",
+  themeColor: "#51652f",
   viewportFit: "cover",
 };
 

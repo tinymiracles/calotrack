@@ -13,11 +13,11 @@ export interface ThemeDef {
 // Keep in sync with the `[data-theme="…"]` blocks in globals.css.
 export const THEMES: ThemeDef[] = [
   {
-    id: "teal",
-    label: "Teal → Blue",
-    tagline: "Cool and tech-forward",
-    swatch: ["#0d9488", "#2563eb"],
-    accentHex: "#2563eb",
+    id: "signature",
+    label: "Poshan Green",
+    tagline: "The logo's own olive green and peach",
+    swatch: ["#3c531f", "#6c7d55"],
+    accentHex: "#51652f",
   },
   {
     id: "forest",
@@ -42,7 +42,7 @@ export const THEMES: ThemeDef[] = [
   },
 ];
 
-export const DEFAULT_THEME: ColorTheme = "teal";
+export const DEFAULT_THEME: ColorTheme = "signature";
 
 /** Applies a color theme to the live document: sets the attribute every
  * themed CSS rule keys off, and re-tints the browser/PWA status bar to

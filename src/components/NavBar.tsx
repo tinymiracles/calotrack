@@ -22,7 +22,8 @@ export default function NavBar() {
     >
       <div className="mx-auto flex max-w-2xl items-center justify-between px-4 py-3">
         <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-gradient-to-br from-[var(--accent-start)] to-[var(--accent-end)]" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-mark.png" alt="" className="h-7 w-7 rounded-full" />
           Poshan
         </Link>
         <button

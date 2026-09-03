@@ -15,8 +15,9 @@ export type Goal = "lose" | "maintain" | "gain";
 
 export type DietPreference = "all" | "veg" | "non_veg";
 
-/** One of the four brand looks a user can personalize the app with. */
-export type ColorTheme = "teal" | "forest" | "sunset" | "berry";
+/** One of the four brand looks a user can personalize the app with.
+ * "signature" is the logo's own olive-green + peach look. */
+export type ColorTheme = "signature" | "forest" | "sunset" | "berry";
 
 export interface Profile {
   name?: string;
@@ -36,7 +37,7 @@ export interface Profile {
   /** Preferred filter for the meal search — doesn't hide anything, just
    * defaults the search results to this diet type. */
   dietPreference?: DietPreference;
-  /** Chosen app color theme. Defaults to "teal" when unset. */
+  /** Chosen app color theme. Defaults to "signature" when unset. */
   colorTheme?: ColorTheme;
   createdAt: string; // ISO date
   updatedAt: string; // ISO date
