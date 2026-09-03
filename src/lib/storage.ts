@@ -124,3 +124,15 @@ export async function setDayWeight(date: string, weightKg: number | undefined): 
 export function newId(): string {
   return Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 }
+
+// --- Reset / log out -----------------------------------------------------
+
+/** Wipes everything stored locally — profile, every day's log, and custom
+ * foods. Used by "Delete profile / log out" — there's no server-side
+ * account yet, so this is what "logging out" means for now. */
+export async function clearAllData(): Promise<void> {
+  if (!isBrowser()) return;
+  window.localStorage.removeItem(KEYS.profile);
+  window.localStorage.removeItem(KEYS.days);
+  window.localStorage.removeItem(KEYS.customFoods);
+}

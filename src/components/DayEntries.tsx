@@ -29,7 +29,10 @@ export function FoodEntryList({ entries, onRemove }: { entries: FoodEntry[]; onR
               <li key={entry.id} className="flex items-center justify-between rounded-lg bg-black/5 px-3 py-2 text-sm">
                 <div>
                   <span className="font-medium">{entry.foodName}</span>
-                  <span className="text-[var(--muted)]"> · {entry.grams}g</span>
+                  <span className="text-[var(--muted)]">
+                    {" "}
+                    · {entry.quantity && entry.unitLabel ? `${entry.quantity} ${entry.unitLabel}${entry.quantity === 1 ? "" : "s"} (${entry.grams}g)` : `${entry.grams}g`}
+                  </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="tabular-nums text-[var(--muted)]">{entry.calories} kcal</span>

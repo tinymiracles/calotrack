@@ -195,6 +195,94 @@ export function projectWeight(days: DayLog[], profile: Profile): WeightProjectio
   };
 }
 
+export interface GoalAnalysis {
+  goalWeightKg: number;
+  currentWeightKg: number;
+  kgToGo: number; // signed: negative means you still need to lose, positive means still need to gain
+  direction: "lose" | "gain";
+  onPace: boolean; // is the current trend even moving in the right direction
+  monthsToGoal: number | null; // null if trend isn't moving the right way, or no data yet
+  headline: string;
+  detail: string;
+}
+
+/** "Crucial analysis": given the logged trend so far, how long until the
+ * user's goal weight, and are they actually headed the right way. Returns
+ * null when there's no goal weight set, or the goal is basically already met. */
+export function analyzeGoal(profile: Profile, projection: WeightProjection | null): GoalAnalysis | null {
+  if (!profile.goalWeightKg) return null;
+
+  const kgToGo = Math.round((profile.goalWeightKg - profile.currentWeightKg) * 10) / 10;
+  if (Math.abs(kgToGo) < 0.2) {
+    return {
+      goalWeightKg: profile.goalWeightKg,
+      currentWeightKg: profile.currentWeightKg,
+      kgToGo,
+      direction: kgToGo <= 0 ? "lose" : "gain",
+      onPace: true,
+      monthsToGoal: 0,
+      headline: "You're basically at your goal weight already.",
+      detail: "Keep logging to hold steady from here.",
+    };
+  }
+
+  const direction: "lose" | "gain" = kgToGo < 0 ? "lose" : "gain";
+
+  if (!projection || projection.avgNetCaloriesPerDay === 0) {
+    return {
+      goalWeightKg: profile.goalWeightKg,
+      currentWeightKg: profile.currentWeightKg,
+      kgToGo,
+      direction,
+      onPace: false,
+      monthsToGoal: null,
+      headline: `${Math.abs(kgToGo)}kg to go to reach ${profile.goalWeightKg}kg.`,
+      detail: "Log a few days of meals and workouts and I'll estimate how long it'll take at your actual pace.",
+    };
+  }
+
+  const movingRightWay = direction === "lose" ? projection.projectedChangeKg < 0 : projection.projectedChangeKg > 0;
+
+  if (!movingRightWay) {
+    const wantVerb = direction === "lose" ? "losing" : "gaining";
+    const actualVerb = projection.projectedChangeKg < 0 ? "losing" : projection.projectedChangeKg > 0 ? "gaining" : "holding steady";
+    return {
+      goalWeightKg: profile.goalWeightKg,
+      currentWeightKg: profile.currentWeightKg,
+      kgToGo,
+      direction,
+      onPace: false,
+      monthsToGoal: null,
+      headline: `Your recent trend is ${actualVerb}, not ${wantVerb} — that's moving away from your goal.`,
+      detail:
+        direction === "lose"
+          ? `You need a calorie deficit to lose. Right now you're averaging ${projection.avgNetCaloriesPerDay > 0 ? "+" : ""}${projection.avgNetCaloriesPerDay} kcal/day net — try trimming portions or adding a short walk.`
+          : `You need a calorie surplus to gain. Right now you're averaging ${projection.avgNetCaloriesPerDay} kcal/day net — try adding an extra snack or meal.`,
+    };
+  }
+
+  const monthlyChangeKg = (projection.projectedChangeKg / 30) * 30; // == projectedChangeKg, kept explicit for clarity
+  const monthsToGoal = Math.round((Math.abs(kgToGo) / Math.abs(monthlyChangeKg)) * 10) / 10;
+
+  const headline =
+    monthsToGoal <= 0.5
+      ? "You're almost there!"
+      : `At this pace, about ${monthsToGoal} month${monthsToGoal === 1 ? "" : "s"} to reach ${profile.goalWeightKg}kg.`;
+
+  const detail = `Based on your last ${projection.daysUsed} logged day${projection.daysUsed === 1 ? "" : "s"}, you're ${direction === "lose" ? "losing" : "gaining"} about ${Math.abs(projection.projectedChangeKg)}kg every 30 days (${projection.avgNetCaloriesPerDay > 0 ? "+" : ""}${projection.avgNetCaloriesPerDay} kcal/day net). Keep logging consistently — the estimate gets more accurate the more days you have on record.`;
+
+  return {
+    goalWeightKg: profile.goalWeightKg,
+    currentWeightKg: profile.currentWeightKg,
+    kgToGo,
+    direction,
+    onPace: true,
+    monthsToGoal,
+    headline,
+    detail,
+  };
+}
+
 export function todayKey(d: Date = new Date()): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");

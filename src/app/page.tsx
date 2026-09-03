@@ -7,6 +7,7 @@ import {
   addCustomFood,
   addExerciseEntry,
   addFoodEntry,
+  getAllDays,
   getCustomFoods,
   getDay,
   getProfile,
@@ -15,24 +16,27 @@ import {
   removeFoodEntry,
   setDayWeight,
 } from "@/lib/storage";
-import { buildSuggestions, calcFoodMacros, summarizeDay, todayKey } from "@/lib/calculations";
+import { analyzeGoal, buildSuggestions, calcFoodMacros, projectWeight, summarizeDay, todayKey } from "@/lib/calculations";
 import { Card, ProgressBar, SectionTitle, StatCard, inputClass, primaryButtonClass } from "@/components/ui";
 import AddFoodForm from "@/components/AddFoodForm";
 import AddExerciseForm from "@/components/AddExerciseForm";
 import { ExerciseEntryList, FoodEntryList } from "@/components/DayEntries";
 import SuggestionsCard from "@/components/SuggestionsCard";
+import GoalAnalysisCard from "@/components/GoalAnalysisCard";
 
 export default function TodayPage() {
   const [profile, setProfile] = useState<Profile | null | undefined>(undefined);
   const [day, setDay] = useState<DayLog | null>(null);
+  const [allDays, setAllDays] = useState<DayLog[]>([]);
   const [customFoods, setCustomFoods] = useState<FoodItem[]>([]);
   const [weightInput, setWeightInput] = useState("");
   const date = todayKey();
 
   const refresh = useCallback(async () => {
-    const [p, d, c] = await Promise.all([getProfile(), getDay(date), getCustomFoods()]);
+    const [p, d, all, c] = await Promise.all([getProfile(), getDay(date), getAllDays(), getCustomFoods()]);
     setProfile(p);
     setDay(d);
+    setAllDays(all);
     setCustomFoods(c);
     if (d.weightKg) setWeightInput(String(d.weightKg));
   }, [date]);
@@ -57,13 +61,20 @@ export default function TodayPage() {
     );
   }
 
-  async function handleAddFood(food: FoodItem, grams: number, meal: MealSlot) {
+  async function handleAddFood(
+    food: FoodItem,
+    grams: number,
+    meal: MealSlot,
+    extra?: { quantity?: number; unitLabel?: string }
+  ) {
     const macros = calcFoodMacros(food, grams);
     const entry: FoodEntry = {
       id: newId(),
       foodId: food.id,
       foodName: food.name,
       grams,
+      quantity: extra?.quantity,
+      unitLabel: extra?.unitLabel,
       meal,
       loggedAt: new Date().toISOString(),
       ...macros,
@@ -111,6 +122,8 @@ export default function TodayPage() {
   const summary = summarizeDay(day ?? undefined, profile);
   const suggestions = buildSuggestions(summary, customFoods);
   const caloriesBudget = summary.calorieTarget + summary.exerciseCalories;
+  const projection = projectWeight(allDays, profile);
+  const goalAnalysis = analyzeGoal(profile, projection);
 
   return (
     <div className="flex flex-col gap-5">
@@ -164,9 +177,16 @@ export default function TodayPage() {
 
       <SuggestionsCard suggestions={suggestions} />
 
+      <GoalAnalysisCard analysis={goalAnalysis} />
+
       <Card>
         <SectionTitle>Log a meal</SectionTitle>
-        <AddFoodForm customFoods={customFoods} onAdd={handleAddFood} onAddCustom={handleAddCustomFood} />
+        <AddFoodForm
+          customFoods={customFoods}
+          defaultDiet={profile.dietPreference ?? "all"}
+          onAdd={handleAddFood}
+          onAddCustom={handleAddCustomFood}
+        />
         <div className="mt-4 border-t border-[var(--border)] pt-4">
           <FoodEntryList entries={day?.foods ?? []} onRemove={handleRemoveFood} />
         </div>

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ActivityLevel, Goal, Profile, Sex } from "@/lib/types";
-import { saveProfile } from "@/lib/storage";
+import { ActivityLevel, DietPreference, Goal, Profile, Sex } from "@/lib/types";
+import { clearAllData, saveProfile } from "@/lib/storage";
 import {
   ACTIVITY_LABELS,
   calcBMI,
@@ -48,8 +48,10 @@ export default function ProfileForm({ existing }: { existing?: Profile }) {
   const [maintenanceIsManual, setMaintenanceIsManual] = useState(existing?.maintenanceIsManual ?? false);
   const [maintenanceCalories, setMaintenanceCalories] = useState(existing?.maintenanceCalories?.toString() ?? "");
   const [proteinTargetG, setProteinTargetG] = useState(existing?.proteinTargetG?.toString() ?? "");
+  const [dietPreference, setDietPreference] = useState<DietPreference>(existing?.dietPreference ?? "all");
   const [photoDataUrl, setPhotoDataUrl] = useState<string | undefined>(existing?.photoDataUrl);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const heightNum = Number(heightCm);
@@ -106,6 +108,7 @@ export default function ProfileForm({ existing }: { existing?: Profile }) {
       maintenanceCalories: Math.round(finalMaintenance),
       maintenanceIsManual,
       proteinTargetG: Math.round(finalProtein),
+      dietPreference,
       photoDataUrl,
       createdAt: existing?.createdAt ?? now,
       updatedAt: now,
@@ -118,6 +121,21 @@ export default function ProfileForm({ existing }: { existing?: Profile }) {
       router.refresh();
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleDelete() {
+    const confirmed = window.confirm(
+      "This deletes your profile and every day you've logged on this device — there's no undo. Continue?"
+    );
+    if (!confirmed) return;
+    setDeleting(true);
+    try {
+      await clearAllData();
+      // Full reload so every page's client-side state re-reads the now-empty data.
+      window.location.href = "/";
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -235,6 +253,33 @@ export default function ProfileForm({ existing }: { existing?: Profile }) {
             />
           </div>
         </div>
+
+        <div>
+          <label className={labelClass}>Meal preference</label>
+          <div className="flex gap-2">
+            {(
+              [
+                { value: "all", label: "All" },
+                { value: "veg", label: "Veg" },
+                { value: "non_veg", label: "Non-veg" },
+              ] as { value: DietPreference; label: string }[]
+            ).map((d) => (
+              <button
+                key={d.value}
+                type="button"
+                onClick={() => setDietPreference(d.value)}
+                className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                  dietPreference === d.value
+                    ? "bg-[var(--accent-soft)] text-[var(--accent)]"
+                    : "border border-[var(--border)] text-[var(--muted)] hover:bg-black/5"
+                }`}
+              >
+                {d.label}
+              </button>
+            ))}
+          </div>
+          <p className="mt-1 text-xs text-[var(--muted)]">Defaults your meal search — you can still switch it per meal.</p>
+        </div>
       </Card>
 
       <Card className="flex flex-col gap-3">
@@ -294,6 +339,23 @@ export default function ProfileForm({ existing }: { existing?: Profile }) {
           </button>
         )}
       </div>
+
+      {existing && (
+        <Card className="flex items-center justify-between gap-3 border-[var(--danger-soft)]">
+          <div>
+            <p className="text-sm font-medium">Delete profile / log out</p>
+            <p className="text-xs text-[var(--muted)]">Erases your profile and every logged day from this device.</p>
+          </div>
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={deleting}
+            className="shrink-0 rounded-lg border border-[var(--danger)] px-4 py-2 text-sm font-medium text-[var(--danger)] hover:bg-[var(--danger-soft)] disabled:opacity-50"
+          >
+            {deleting ? "Deleting…" : "Delete & log out"}
+          </button>
+        </Card>
+      )}
     </form>
   );
 }

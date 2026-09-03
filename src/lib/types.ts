@@ -13,6 +13,8 @@ export type ActivityLevel =
 
 export type Goal = "lose" | "maintain" | "gain";
 
+export type DietPreference = "all" | "veg" | "non_veg";
+
 export interface Profile {
   name?: string;
   sex: Sex;
@@ -28,6 +30,9 @@ export interface Profile {
   maintenanceIsManual: boolean;
   proteinTargetG: number;
   photoDataUrl?: string;
+  /** Preferred filter for the meal search — doesn't hide anything, just
+   * defaults the search results to this diet type. */
+  dietPreference?: DietPreference;
   createdAt: string; // ISO date
   updatedAt: string; // ISO date
 }
@@ -41,6 +46,12 @@ export interface FoodItem {
   carbsPer100g: number;
   fatPer100g: number;
   custom?: boolean;
+  /** For countable foods (a roti, an egg, a candy) — lets people log "how many"
+   * instead of guessing grams. When present, the UI defaults to piece entry. */
+  unitLabel?: string;
+  unitGrams?: number;
+  /** Best-effort veg / non-veg classification, used by the diet filter. */
+  dietTag?: "veg" | "non_veg";
 }
 
 export interface ExerciseItem {
@@ -55,6 +66,9 @@ export interface FoodEntry {
   foodId: string;
   foodName: string;
   grams: number;
+  /** Present when this entry was logged by piece count rather than grams. */
+  quantity?: number;
+  unitLabel?: string;
   calories: number;
   protein: number;
   carbs: number;

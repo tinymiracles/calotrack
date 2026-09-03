@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { DayLog, Profile } from "@/lib/types";
 import { getAllDays, getProfile } from "@/lib/storage";
-import { formatDateLabel, projectWeight, summarizeDay } from "@/lib/calculations";
+import { analyzeGoal, formatDateLabel, projectWeight, summarizeDay } from "@/lib/calculations";
 import { Card, SectionTitle, StatCard, primaryButtonClass } from "@/components/ui";
+import GoalAnalysisCard from "@/components/GoalAnalysisCard";
 
 export default function HistoryPage() {
   const [profile, setProfile] = useState<Profile | null | undefined>(undefined);
@@ -33,6 +34,7 @@ export default function HistoryPage() {
   }
 
   const projection = projectWeight(days, profile);
+  const goalAnalysis = analyzeGoal(profile, projection);
   const loggedDays = days.filter((d) => d.foods.length > 0 || d.exercises.length > 0);
 
   return (
@@ -65,6 +67,8 @@ export default function HistoryPage() {
           <p className="text-sm text-[var(--muted)]">Log at least one day of meals or workouts to see a projection.</p>
         )}
       </Card>
+
+      <GoalAnalysisCard analysis={goalAnalysis} />
 
       <Card>
         <SectionTitle>Daily log</SectionTitle>
