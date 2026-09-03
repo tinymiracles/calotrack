@@ -2,7 +2,9 @@ import { ReactNode } from "react";
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm ${className}`}>
+    <div
+      className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_20px_-12px_rgba(0,0,0,0.12)] ${className}`}
+    >
       {children}
     </div>
   );
@@ -67,10 +69,10 @@ export const inputClass =
 export const labelClass = "mb-1 block text-xs font-medium text-[var(--muted)]";
 
 export const primaryButtonClass =
-  "rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50";
+  "rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white transition-all hover:opacity-90 active:scale-[0.97] disabled:opacity-50 disabled:active:scale-100";
 
 export const secondaryButtonClass =
-  "rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-medium text-[var(--foreground)] hover:bg-black/5";
+  "rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition-transform hover:bg-black/5 active:scale-[0.97]";
 
 export const chipButtonClass =
-  "rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--muted)] hover:bg-black/5";
+  "rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--muted)] transition-transform hover:bg-black/5 active:scale-95";

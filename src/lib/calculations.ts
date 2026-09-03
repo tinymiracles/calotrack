@@ -132,8 +132,14 @@ export interface Suggestions {
   avoidFoods: FoodItem[];
 }
 
-export function buildSuggestions(summary: DaySummary, customFoods: FoodItem[] = []): Suggestions {
+export function buildSuggestions(
+  summary: DaySummary,
+  customFoods: FoodItem[] = [],
+  dietPreference: Profile["dietPreference"] = "all"
+): Suggestions {
   const { remainingCalories, remainingProtein } = summary;
+  const matchesDiet = (f: FoodItem) =>
+    !dietPreference || dietPreference === "all" || !f.dietTag || f.dietTag === dietPreference;
 
   let status: Suggestions["status"] = "on_track";
   let headline = "You're on track.";
@@ -157,9 +163,10 @@ export function buildSuggestions(summary: DaySummary, customFoods: FoodItem[] = 
 
   const goodFoods = highProteinFoods(customFoods)
     .filter((f) => f.caloriesPer100g <= Math.max(remainingCalories, 120))
+    .filter(matchesDiet)
     .slice(0, 6);
 
-  const avoidFoods = status === "over" ? lowValueFoods(customFoods).slice(0, 6) : [];
+  const avoidFoods = status === "over" ? lowValueFoods(customFoods).filter(matchesDiet).slice(0, 6) : [];
 
   return { status, headline, detail, goodFoods, avoidFoods };
 }

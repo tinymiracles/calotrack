@@ -120,7 +120,7 @@ export default function TodayPage() {
   }
 
   const summary = summarizeDay(day ?? undefined, profile);
-  const suggestions = buildSuggestions(summary, customFoods);
+  const suggestions = buildSuggestions(summary, customFoods, profile.dietPreference ?? "all");
   const caloriesBudget = summary.calorieTarget + summary.exerciseCalories;
   const projection = projectWeight(allDays, profile);
   const goalAnalysis = analyzeGoal(profile, projection);
