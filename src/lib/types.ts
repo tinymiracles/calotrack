@@ -81,6 +81,9 @@ export interface FoodEntry {
   fat: number;
   meal: MealSlot;
   loggedAt: string; // ISO datetime
+  /** How this entry was logged. Missing/"manual" covers both database search
+   * and the custom-food form; "photo" is an AI estimate from a meal photo. */
+  source?: "manual" | "photo";
 }
 
 export type MealSlot = "breakfast" | "lunch" | "snack" | "dinner" | "other";

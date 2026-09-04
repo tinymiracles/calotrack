@@ -5,6 +5,7 @@ import { FOOD_DATABASE } from "@/lib/foodDatabase";
 import { calcFoodMacros } from "@/lib/calculations";
 import { DietPreference, FoodItem, MealSlot } from "@/lib/types";
 import { inputClass, labelClass, primaryButtonClass } from "./ui";
+import AddFoodPhoto from "./AddFoodPhoto";
 
 const MEAL_OPTIONS: { value: MealSlot; label: string }[] = [
   { value: "breakfast", label: "Breakfast" },
@@ -26,14 +27,24 @@ export default function AddFoodForm({
   defaultDiet = "all",
   onAdd,
   onAddCustom,
+  onAddPhoto,
 }: {
   customFoods: FoodItem[];
   defaultMeal?: MealSlot;
   defaultDiet?: DietPreference;
   onAdd: (food: FoodItem, grams: number, meal: MealSlot, extra?: { quantity?: number; unitLabel?: string }) => void;
   onAddCustom: (food: FoodItem, grams: number, meal: MealSlot) => void;
+  onAddPhoto: (data: {
+    name: string;
+    grams: number;
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+    meal: MealSlot;
+  }) => void;
 }) {
-  const [mode, setMode] = useState<"search" | "custom">("search");
+  const [mode, setMode] = useState<"search" | "custom" | "photo">("search");
   const [query, setQuery] = useState("");
   const [diet, setDiet] = useState<DietPreference>(defaultDiet);
   const [selected, setSelected] = useState<FoodItem | null>(null);
@@ -135,9 +146,18 @@ export default function AddFoodForm({
         >
           Custom food
         </button>
+        <button
+          type="button"
+          onClick={() => setMode("photo")}
+          className={`rounded-full px-3 py-1 ${mode === "photo" ? "bg-[var(--accent-soft)] text-[var(--accent)] font-medium" : "text-[var(--muted)]"}`}
+        >
+          📷 Photo
+        </button>
       </div>
 
-      {mode === "search" ? (
+      {mode === "photo" ? (
+        <AddFoodPhoto defaultMeal={meal} onAdd={onAddPhoto} />
+      ) : mode === "search" ? (
         <form onSubmit={handleAddSearch} className="flex flex-col gap-3">
           <div>
             <div className="mb-1 flex items-center justify-between">

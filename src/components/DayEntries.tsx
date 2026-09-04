@@ -28,7 +28,10 @@ export function FoodEntryList({ entries, onRemove }: { entries: FoodEntry[]; onR
             {items.map((entry) => (
               <li key={entry.id} className="flex items-center justify-between rounded-lg bg-black/5 px-3 py-2 text-sm">
                 <div>
-                  <span className="font-medium">{entry.foodName}</span>
+                  <span className="font-medium">
+                    {entry.source === "photo" && <span aria-label="Logged from a photo">📷 </span>}
+                    {entry.foodName}
+                  </span>
                   <span className="text-[var(--muted)]">
                     {" "}
                     · {entry.quantity && entry.unitLabel ? `${entry.quantity} ${entry.unitLabel}${entry.quantity === 1 ? "" : "s"} (${entry.grams}g)` : `${entry.grams}g`}

@@ -90,6 +90,32 @@ export default function TodayPage() {
     await handleAddFood(food, grams, meal);
   }
 
+  async function handleAddPhotoFood(data: {
+    name: string;
+    grams: number;
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+    meal: MealSlot;
+  }) {
+    const entry: FoodEntry = {
+      id: newId(),
+      foodId: `photo-${newId()}`,
+      foodName: data.name,
+      grams: data.grams,
+      calories: data.calories,
+      protein: data.protein,
+      carbs: data.carbs,
+      fat: data.fat,
+      meal: data.meal,
+      loggedAt: new Date().toISOString(),
+      source: "photo",
+    };
+    await addFoodEntry(date, entry);
+    refresh();
+  }
+
   async function handleRemoveFood(id: string) {
     await removeFoodEntry(date, id);
     refresh();
@@ -188,6 +214,7 @@ export default function TodayPage() {
           defaultDiet={profile.dietPreference ?? "all"}
           onAdd={handleAddFood}
           onAddCustom={handleAddCustomFood}
+          onAddPhoto={handleAddPhotoFood}
         />
         <div className="mt-4 border-t border-[var(--border)] pt-4">
           <FoodEntryList entries={day?.foods ?? []} onRemove={handleRemoveFood} />
