@@ -8,7 +8,10 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/",
     scope: "/",
     display: "standalone",
-    background_color: "#f7f8f6",
+    // The PWA launch screen's backdrop — the logo's own peach, so opening
+    // the installed app briefly shows the icon sitting on its native color
+    // instead of the app's own (different) day-to-day background.
+    background_color: "#fbead9",
     theme_color: "#51652f",
     orientation: "portrait",
     icons: [

@@ -49,9 +49,11 @@ export default function TodayPage() {
 
   if (!profile) {
     return (
-      <Card className="flex flex-col items-start gap-3">
+      <Card className="flex flex-col items-center gap-3 py-8 text-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo-lockup.png" alt="Poshan" className="mb-1 h-32 w-auto" />
         <h1 className="text-lg font-semibold">Set up your profile to start</h1>
-        <p className="text-sm text-[var(--muted)]">
+        <p className="max-w-xs text-sm text-[var(--muted)]">
           Height, weight, age and your maintenance calories — takes a minute, then you just log your day.
         </p>
         <Link href="/profile" className={primaryButtonClass}>
