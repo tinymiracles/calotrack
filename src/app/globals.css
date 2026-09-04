@@ -1,11 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f8f6;
-  --surface: #ffffff;
+  /* Neutrals warmed toward the logo's peach so the whole app, not just
+   * the accent, reads as one brand — cards stay a near-white so they
+   * still lift clearly off the page. */
+  --background: #f8f2e9;
+  --surface: #fffcf8;
   --foreground: #1a1f1c;
   --muted: #6b7280;
-  --border: #e5e7eb;
+  --border: #e6dcc8;
   /* Brand: sampled straight from the Poshan logo — deep olive green
    * ribbon on a soft peach circle. --accent is the solid representative
    * (text, icons, focus rings, status bar); --accent-start/--accent-end
